@@ -326,7 +326,7 @@ window.addEventListener('keydown', (event) => {
         // Verifica se todas as três teclas de atalho estão ativas
         if (teclasPressionadas['1'] && teclasPressionadas['2'] && teclasPressionadas['3']) {
             // Redireciona para o Painel José Teixeira Fialho
-            window.location.href = "https://juniorcriste.github.io/PainelJTF/";
+            window.location.href = "https://juniorcriste.github.io/Painel-Interativo/";
         }
     }
 });
