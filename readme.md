@@ -1,7 +1,7 @@
 ## Gênio Matemático
 #### Junior Criste
 
-<img src="img/prints/Genio%20Matematico.png">
+![alt text](img/prints/Genio%20Matematico.png)
 ##### Ranking de melhor jogador
 <img src="img/prints/Genio%20Matematico1.png">
 ##### Charadas
