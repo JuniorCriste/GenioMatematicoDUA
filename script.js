@@ -73,18 +73,16 @@ let totalTime = 0;
 
 window.onload = () => {
     loadHighScore();
-    let loadPercent = 0;
-    const loadBar = document.getElementById('load-progress');
     
-    const loading = setInterval(() => {
-        loadPercent += 2;
-        if (loadBar) loadBar.style.width = loadPercent + "%";
-        
-        if (loadPercent >= 100) {
-            clearInterval(loading);
-            startGame();
+    const btn = document.getElementById('btn-start');
+    btn.addEventListener('click', iniciarProcesso);
+
+    window.addEventListener('keydown', (e) => {
+        const startScreen = document.getElementById('start-screen');
+        if (!startScreen.classList.contains('hidden') && e.key === '5') {
+            iniciarProcesso();
         }
-    }, 50);
+    });
 };
 
 function loadHighScore() {
@@ -97,6 +95,22 @@ function loadHighScore() {
             document.getElementById('photo-winner').innerHTML = `<img src="${photo}">`;
         }
     }
+}
+
+function iniciarProcesso() {
+    document.getElementById('btn-start').classList.add('hidden');
+    document.getElementById('loader-section').classList.remove('hidden');
+    
+    let loadPercent = 0;
+    const loadBar = document.getElementById('load-progress');
+    const loading = setInterval(() => {
+        loadPercent += 2;
+        if (loadBar) loadBar.style.width = loadPercent + "%";
+        if (loadPercent >= 100) {
+            clearInterval(loading);
+            startGame();
+        }
+    }, 40);
 }
 
 function startGame() {
@@ -118,10 +132,9 @@ function nextQuestion() {
     if (isHard && filaCharadas.length > 0) {
         const index = Math.floor(Math.random() * filaCharadas.length);
         qObj = filaCharadas.splice(index, 1)[0];
-        totalTime = 180; 
+        totalTime = 180;
         document.getElementById('badge').innerText = "CHARADA - 3 MIN";
     } else {
-        // Lógica para garantir que o resultado matemático NÃO contenha o número 0
         let n1, n2, op, res, resStr;
         do {
             n1 = Math.floor(Math.random() * 40) + 2;
@@ -132,7 +145,7 @@ function nextQuestion() {
         } while (resStr.includes('0'));
 
         qObj = { q: `Quanto é ${n1} ${op === '*' ? '×' : '+'} ${n2}?`, a: resStr };
-        totalTime = 60; 
+        totalTime = 60;
         document.getElementById('badge').innerText = "CÁLCULO - 1 MIN";
     }
 
@@ -152,7 +165,6 @@ function createInputs(len) {
         input.className = 'digit-input';
         input.maxLength = 1;
         input.addEventListener('input', (e) => {
-            // Remove qualquer coisa que não seja número E remove o número 0
             e.target.value = e.target.value.replace(/[^1-9]/g, '');
             if (e.target.value && e.target.nextElementSibling) {
                 e.target.nextElementSibling.focus();
@@ -175,17 +187,13 @@ function startCountdown() {
         timeLeft -= 0.1;
         const progressBar = document.getElementById('timer-bar');
         if (progressBar) progressBar.style.width = (timeLeft / totalTime * 100) + "%";
-        
-        if (timeLeft <= 0) {
-            handleError();
-        }
+        if (timeLeft <= 0) handleError();
     }, 100);
 }
 
 function checkAttempt() {
     const inputs = document.querySelectorAll('.digit-input');
     const val = Array.from(inputs).map(i => i.value).join('');
-    
     if (val.length === currentAnswer.length) {
         if (val === currentAnswer) {
             score += (totalTime > 60 ? 15 : 10);
@@ -203,15 +211,10 @@ function handleError() {
     lives--;
     updateUI();
     playSound(150, 0.3);
-    const inputs = document.querySelectorAll('.digit-input');
-    inputs.forEach(i => i.classList.add('anim-error'));
-    
+    document.querySelectorAll('.digit-input').forEach(i => i.classList.add('anim-error'));
     setTimeout(() => {
-        if (lives <= 0) {
-            endGame();
-        } else {
-            nextQuestion();
-        }
+        if (lives <= 0) endGame();
+        else nextQuestion();
     }, 600);
 }
 
@@ -223,7 +226,7 @@ function updateUI() {
             const img = document.createElement('img');
             img.src = 'img/vida.png';
             img.className = 'life-img';
-            img.onerror = () => { img.alt = "❤️"; }; 
+            img.onerror = () => { img.alt = "❤️"; };
             livesDisplay.appendChild(img);
         }
     }
@@ -261,18 +264,15 @@ async function takeSnap() {
     const canvas = document.getElementById('canvas');
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (video) {
-            video.classList.remove('hidden');
-            video.srcObject = stream;
-            setTimeout(() => {
-                const context = canvas.getContext('2d');
-                context.drawImage(video, 0, 0, 300, 225);
-                const data = canvas.toDataURL('image/png');
-                localStorage.setItem('winner_photo', data);
-                stream.getTracks().forEach(t => t.stop());
-                video.classList.add('hidden');
-            }, 2000);
-        }
+        video.classList.remove('hidden');
+        video.srcObject = stream;
+        setTimeout(() => {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, 300, 225);
+            localStorage.setItem('winner_photo', canvas.toDataURL('image/png'));
+            stream.getTracks().forEach(t => t.stop());
+            video.classList.add('hidden');
+        }, 2000);
     } catch (e) { console.warn("Câmera indisponível"); }
 }
 
@@ -290,18 +290,14 @@ function playSound(freq, duration) {
 }
 
 const teclasPressionadas = { '1': false, '2': false, '3': false };
-
-window.addEventListener('keydown', (event) => {
-    if (event.key in teclasPressionadas) {
-        teclasPressionadas[event.key] = true;
+window.addEventListener('keydown', (e) => {
+    if (e.key in teclasPressionadas) {
+        teclasPressionadas[e.key] = true;
         if (teclasPressionadas['1'] && teclasPressionadas['2'] && teclasPressionadas['3']) {
             window.location.href = "https://juniorcriste.github.io/Painel-Interativo/";
         }
     }
 });
-
-window.addEventListener('keyup', (event) => {
-    if (event.key in teclasPressionadas) {
-        teclasPressionadas[event.key] = false;
-    }
+window.addEventListener('keyup', (e) => {
+    if (e.key in teclasPressionadas) teclasPressionadas[e.key] = false;
 });
