@@ -5,18 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gênio Matemático</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;800&family=Gochi+Hand&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div id="app">
         <div id="start-screen" class="screen">
             <h1 class="game-title">Gênio Matemático</h1>
+            
             <div id="ranking-container" class="hidden">
                 <div id="photo-winner"></div>
                 <p class="highscore-text">Gênio com <b><span id="high-score-val">0</span></b> pontos!</p>
             </div>
-            <div id="loader-section">
+
+            <button id="btn-start" class="postit-button">Pressione o 5 para iniciar</button>
+
+            <div id="loader-section" class="hidden">
                 <p>Carregando Desafios...</p>
                 <div class="loader-bar"><div id="load-progress"></div></div>
             </div>
@@ -47,18 +51,15 @@
         <video id="webcam" autoplay playsinline class="hidden" width="300" height="225"></video>
         <canvas id="canvas" class="hidden" width="300" height="225"></canvas>
 
- <div class="shortcut">
-    Pressione as teclas <strong>1 + 2 + 3</strong> juntas para retornar ao
-    <strong>Painel José Teixeira Fialho</strong>
-</div>
+        <div class="shortcut">
+            Pressione as teclas <strong>1 + 2 + 3</strong> juntas para retornar ao 
+            <strong>Painel José Teixeira Fialho</strong>
+        </div>
 
-<footer>
-    Desenvolvido por Junior Criste - github.com/JuniorCriste (versão 1.0)
-</footer>
-
+        <footer>
+            Desenvolvido por Junior Criste - github.com/JuniorCriste (versão 1.1)
+        </footer>
     </div>
-
-   
 
     <script src="script.js"></script>
 </body>
