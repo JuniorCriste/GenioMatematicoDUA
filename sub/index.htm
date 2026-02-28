@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gênio Matemático - Edição Acessível</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="start-screen" class="screen">
+        <h1 class="game-title">Gênio Matemático</h1>
+        
+        <div id="setup-content"></div>
+
+        <div id="loader-section" class="hidden">
+            <p style="font-family: 'Gochi Hand';">Carregando desafio...</p>
+            <div class="loader-bar"><div id="load-progress"></div></div>
+        </div>
+
+        <div id="ranking-container" class="hidden">
+            <p class="highscore-text">Recorde: <span id="high-score-val">0</span></p>
+            <div id="photo-winner"></div>
+        </div>
+    </div>
+
+    <div id="game-screen" class="screen hidden">
+        <div class="top-info">
+            <div class="lives-container" id="lives-display"></div>
+            <div>Score: <span id="current-score">0</span></div>
+        </div>
+        <div class="timer-wrapper"><div id="timer-bar"></div></div>
+        <div class="badge" id="badge">CÁLCULO</div>
+        <div id="question"></div>
+        <div id="inputs-container"></div>
+    </div>
+
+    <div id="game-over-screen" class="screen hidden">
+        <h2 class="game-title-mini">FIM DE JOGO</h2>
+        <p>Pontuação: <span id="final-score">0</span></p>
+        <p id="new-record-msg" class="hidden">🏆 NOVO RECORDE! 🏆</p>
+        <p>Reiniciando em <span id="return-timer">6</span>...</p>
+        <video id="webcam" width="300" height="225" autoplay class="hidden"></video>
+        <canvas id="canvas" width="300" height="225" class="hidden"></canvas>
+    </div>
+
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
