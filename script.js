@@ -17,7 +17,7 @@ const charadasLogicasOriginal = [
     {q: "Quanto é 10 menos 10 dividido por 10?", a: "9"},
     {q: "Quantos lados têm dois quadrados?", a: "8"},
     {q: "Se 5 máquinas fazem 5 peças em 5 minutos, quanto tempo 100 máquinas levam para fazer 100 peças?", a: "5"},
-    {q: "Quantos ovos você pode comer em jejum?", a: "1"},
+    {q: "Se eu ganho R$ 37,00 por dia trabalhado e trabalho 3 dias por semana, quanto recebi no último mês, que teve 31 dias, considerando que faltei 3 dias sem justificativa e que em 2 dias trabalhei apenas metade do período?", a: "296"},
     {q: "Um fazendeiro tem 17 vacas e todas morrem menos 9. Quantas ficam vivas?", a: "9"},
     {q: "Quanto é a terça parte de 6 mais 2?", a: "4"},
     {q: "Quantos anos têm uma década e meia?", a: "15"},

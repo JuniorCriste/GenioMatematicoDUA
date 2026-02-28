@@ -131,7 +131,7 @@ body {
 .shortcut {
     margin-top: 40px;
     background: rgba(255,255,255,0.08);
-    border-radius: 12px;
+    border-radius: 11px;
     font-size: 14px;
     font-weight: 600;
     color: #242424;
@@ -141,22 +141,25 @@ body {
 }
 
 footer {
-    font-size: 8px;
+    font-size: 10px;
     color: #353535;
     text-align: center;
+    line-height: 1;
     opacity: 0.6;
-    transition: font-size 0.3s ease; /* animação suave */
+    transition: font-size 0.2s ease; 
 }
 
 footer:hover {
-    font-size: 10px;
+    font-size: 12px;
+    opacity: 1.0;
+    margin-top: 8px;
 }
 
 /* Botão Estilo Post-it */
 .postit-button {
     font-family: 'Gochi Hand', cursive;
     font-size: 1.6rem;
-    background: #9CD5CD;
+    background: #eb8aeb;
     border: none;
     padding: 15px 25px;
     cursor: pointer;
