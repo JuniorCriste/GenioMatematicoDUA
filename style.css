@@ -145,6 +145,11 @@ footer {
     color: #353535;
     text-align: center;
     opacity: 0.6;
+    transition: font-size 0.3s ease; /* animação suave */
+}
+
+footer:hover {
+    font-size: 10px;
 }
 
 /* Botão Estilo Post-it */
