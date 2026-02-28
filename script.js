@@ -17,7 +17,7 @@ const charadasLogicasOriginal = [
     {q: "Quanto é 10 menos 10 dividido por 10?", a: "9"},
     {q: "Quantos lados têm dois quadrados?", a: "8"},
     {q: "Se 5 máquinas fazem 5 peças em 5 minutos, quanto tempo 100 máquinas levam para fazer 100 peças?", a: "5"},
-    {q: "Se eu ganho R$ 37,00 por dia trabalhado e trabalho 3 dias por semana, quanto recebi no último mês, que teve 31 dias, considerando que faltei 3 dias sem justificativa e que em 2 dias trabalhei apenas metade do período?", a: "296"},
+    {q: "Se eu ganho R$ 37,00 por dia trabalhado e trabalho 3 dias por semana, quanto recebi no último mês?", a: "296"},
     {q: "Um fazendeiro tem 17 vacas e todas morrem menos 9. Quantas ficam vivas?", a: "9"},
     {q: "Quanto é a terça parte de 6 mais 2?", a: "4"},
     {q: "Quantos anos têm uma década e meia?", a: "15"},
@@ -62,6 +62,7 @@ const charadasLogicasOriginal = [
     {q: "Quantos dias há em 5 semanas?", a: "35"},
     {q: "Quanto é 64 dividido por 8?", a: "8"}
 ];
+
 let configAcess = { fonteGrande: false, altoContraste: false, narracao: false };
 let score = 0, lives = 5, currentAnswer = "", timer = null, timeLeft = 0, totalTime = 0, filaCharadas = [];
 
@@ -75,19 +76,13 @@ function tuxDiz(texto, callback) {
 
 window.onload = () => {
     loadHighScore();
-    const btnUnlock = document.getElementById('btn-unlock');
-    btnUnlock.onclick = () => {
-        iniciarFluxoAcessibilidade();
-    };
+    document.getElementById('btn-unlock').onclick = () => iniciarFluxoAcessibilidade();
 };
 
 function iniciarFluxoAcessibilidade() {
     const container = document.getElementById('setup-container');
     container.innerHTML = '<p class="game-title-mini">Ouvindo o Tux...</p>';
-    
-    const boasVindas = "Seja bem vindo ao Gênio Matemático, eu sou Tux, seu assistente de acessibilidade!, você poderá alterar o tamanho da fonte, o contraste e usar audiodescrição. Marque as opções para ajustar seu nível de acessibilidade e bom jogo!";
-    
-    tuxDiz(boasVindas, () => passoFonte());
+    tuxDiz("Seja bem-vindo ao Gênio Matemático! Escolha o tamanho da fonte: 1 normal ou 2 grande.", () => passoFonte());
 }
 
 function passoFonte() {
@@ -95,17 +90,14 @@ function passoFonte() {
     container.innerHTML = `
         <p class="game-title-mini">Tamanho da fonte:</p>
         <button class="postit-button" id="f1">1. NORMAL</button>
-        <button class="postit-button" id="f2" style="font-size: 1.8rem;">2. GRANDE</button>
+        <button class="postit-button" id="f2">2. GRANDE</button>
     `;
-    tuxDiz("Escolha o tamanho da fonte: 1 normal ou 2 grande.");
-    
     const selecionar = (v) => {
         if(v === 2) { configAcess.fonteGrande = true; document.body.classList.add('font-grande'); }
-        window.onkeydown = null; passoContraste();
+        passoContraste();
     };
     document.getElementById('f1').onclick = () => selecionar(1);
     document.getElementById('f2').onclick = () => selecionar(2);
-    window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
 }
 
 function passoContraste() {
@@ -115,15 +107,13 @@ function passoContraste() {
         <button class="postit-button" id="c1">1. PADRÃO</button>
         <button class="postit-button" id="c2" style="background:#000; color:#fff;">2. ALTO CONTRASTE</button>
     `;
-    tuxDiz("Escolha as cores: 1 padrão ou 2 alto contraste.");
-    
+    tuxDiz("Cores: 1 padrão ou 2 alto contraste.");
     const selecionar = (v) => {
         if(v === 2) { configAcess.altoContraste = true; document.body.classList.add('high-contrast'); }
-        window.onkeydown = null; passoNarrador();
+        passoNarrador();
     };
     document.getElementById('c1').onclick = () => selecionar(1);
     document.getElementById('c2').onclick = () => selecionar(2);
-    window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
 }
 
 function passoNarrador() {
@@ -133,22 +123,19 @@ function passoNarrador() {
         <button class="postit-button" id="n1">1. SIM</button>
         <button class="postit-button" id="n2">2. NÃO</button>
     `;
-    tuxDiz("Deseja ativar o narrador para as perguntas? 1 sim ou 2 não.");
-    
+    tuxDiz("Ativar narrador? 1 sim ou 2 não.");
     const selecionar = (v) => {
         configAcess.narracao = (v === 1);
-        window.onkeydown = null; finalizarSetup();
+        finalizarSetup();
     };
     document.getElementById('n1').onclick = () => selecionar(1);
     document.getElementById('n2').onclick = () => selecionar(2);
-    window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
 }
 
 function finalizarSetup() {
     document.getElementById('setup-screen').classList.add('hidden');
     document.getElementById('start-screen').classList.remove('hidden');
     document.getElementById('btn-start').onclick = iniciarProcesso;
-    window.onkeydown = (e) => { if(e.key === '5') iniciarProcesso(); };
 }
 
 function iniciarProcesso() {
@@ -164,24 +151,32 @@ function iniciarProcesso() {
 function startGame() {
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('game-screen').classList.remove('hidden');
-    score = 0; lives = 5; 
-    filaCharadas = [...charadasLogicas];
-    updateUI(); nextQuestion();
+    
+    // RESET ÚNICO
+    score = 0; 
+    lives = 5; 
+    filaCharadas = [...charadasLogicasOriginal];
+    
+    updateUI(); 
+    nextQuestion();
 }
 
 function nextQuestion() {
+    if(timer) clearInterval(timer);
+    
     const isHard = Math.random() > 0.6 && filaCharadas.length > 0;
     let qObj;
 
     if (isHard) {
         const idx = Math.floor(Math.random() * filaCharadas.length);
         qObj = filaCharadas.splice(idx, 1)[0];
-        totalTime = 180; document.getElementById('badge').innerText = "CHARADA - 3 MIN";
+        totalTime = 180; 
+        document.getElementById('badge').innerText = "CHARADA - 3 MIN";
     } else {
         let n1 = Math.floor(Math.random() * 20) + 2, n2 = Math.floor(Math.random() * 9) + 2;
-        let res = n1 + n2;
-        qObj = { q: `Quanto é ${n1} + ${n2}?`, a: res.toString() };
-        totalTime = 60; document.getElementById('badge').innerText = "CÁLCULO - 1 MIN";
+        qObj = { q: `Quanto é ${n1} + ${n2}?`, a: (n1 + n2).toString() };
+        totalTime = 60; 
+        document.getElementById('badge').innerText = "CÁLCULO - 1 MIN";
     }
 
     currentAnswer = qObj.a;
@@ -215,9 +210,9 @@ function checkAttempt() {
     if (val.length === currentAnswer.length) {
         if (val === currentAnswer) {
             score += (totalTime > 60 ? 15 : 10);
-            updateUI(); playSound(600, 0.1);
-            if(configAcess.narracao) tuxDiz("Correto", () => setTimeout(nextQuestion, 500));
-            else setTimeout(nextQuestion, 500);
+            updateUI(); 
+            playSound(600, 0.1);
+            setTimeout(nextQuestion, 600);
         } else {
             handleError();
         }
@@ -227,13 +222,15 @@ function checkAttempt() {
 function handleError() {
     clearInterval(timer);
     lives--;
-    updateUI(); playSound(150, 0.3);
+    updateUI(); 
+    playSound(150, 0.3);
+    
     if(configAcess.narracao) {
         tuxDiz(`Errado! Você tem ${lives} vidas.`, () => {
             if (lives <= 0) endGame(); else nextQuestion();
         });
     } else {
-        if (lives <= 0) setTimeout(endGame, 600); else setTimeout(nextQuestion, 600);
+        if (lives <= 0) setTimeout(endGame, 800); else setTimeout(nextQuestion, 800);
     }
 }
 
@@ -244,14 +241,12 @@ function updateUI() {
     for (let i = 0; i < lives; i++) {
         const img = document.createElement('img');
         img.src = 'https://cdn-icons-png.flaticon.com/512/833/833472.png';
-        img.className = 'life-img';
         img.style.width = '30px'; img.style.marginRight = '5px';
         display.appendChild(img);
     }
 }
 
 function startCountdown() {
-    if (timer) clearInterval(timer);
     timer = setInterval(() => {
         timeLeft -= 0.1;
         document.getElementById('timer-bar').style.width = (timeLeft / totalTime * 100) + "%";
@@ -264,17 +259,23 @@ function endGame() {
     document.getElementById('game-screen').classList.add('hidden');
     document.getElementById('game-over-screen').classList.remove('hidden');
     document.getElementById('final-score').innerText = score;
-    setTimeout(() => location.reload(), 6000);
+    
+    const high = localStorage.getItem('math_record') || 0;
+    if (score > parseInt(high)) localStorage.setItem('math_record', score);
+    
+    setTimeout(() => location.reload(), 5000);
 }
 
 function playSound(freq, dur) {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const g = ctx.createGain();
-    osc.connect(g); g.connect(ctx.destination);
-    osc.frequency.value = freq; osc.start();
-    g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + dur);
-    osc.stop(ctx.currentTime + dur);
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.connect(g); g.connect(ctx.destination);
+        osc.frequency.value = freq; osc.start();
+        g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + dur);
+        osc.stop(ctx.currentTime + dur);
+    } catch(e){}
 }
 
 function loadHighScore() {
