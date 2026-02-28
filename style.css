@@ -2,181 +2,61 @@
 
 :root {
     --postit-yellow: #fff382;
-    --postit-blue: #7afaff;
     --postit-pink: #ff7eb9;
-    --postit-green: #a7ff83;
-    --text: #2d3436;
 }
 
 body {
-    margin: 0; 
-    font-family: 'Poppins', sans-serif;
-    background: #e0e0e0; /* Fundo cinza para destacar os post-its */
+    margin: 0; font-family: 'Poppins', sans-serif;
+    background: #e0e0e0;
     background-image: radial-gradient(#bcbcbc 1px, transparent 1px);
-    background-size: 20px 20px; /* Efeito de papel quadriculado ao fundo */
+    background-size: 20px 20px;
     display: flex; justify-content: center; align-items: center;
     height: 100vh; overflow: hidden;
 }
 
-.game-title {
-    font-family: 'Gochi Hand', cursive; /* Fonte que parece escrita à mão */
-    font-size: 3.5rem;
-    color: #333;
-    margin-bottom: 20px;
-    transform: rotate(-2deg);
-}
+/* ACESSIBILIDADE */
+body.font-grande { font-size: 1.4rem; }
+body.font-grande .game-title { font-size: 4.5rem; text-transform: uppercase; }
+body.font-grande #question { font-size: 2.8rem; text-transform: uppercase; }
+body.font-grande .postit-button { font-size: 2.2rem; }
 
-.game-title-mini {
-    font-family: 'Gochi Hand', cursive;
-    font-size: 2rem;
-    color: #333;
-    margin: 0 0 10px 0;
-}
+body.high-contrast { background: #000 !important; color: #fff !important; }
+body.high-contrast .screen { background: #000 !important; border: 4px solid #fff !important; color: #fff !important; box-shadow: none; }
+body.high-contrast .digit-input { border-bottom: 4px solid #fff !important; color: #fff !important; }
+body.high-contrast .postit-button { background: #fff !important; color: #000 !important; border: 2px solid #000 !important; }
+body.high-contrast #timer-bar { background: #fff !important; }
+body.high-contrast .life-img { filter: grayscale(1) brightness(3); }
 
 .screen {
     background: var(--postit-yellow);
-    padding: 2.5rem;
-    width: 480px;
-    min-height: 500px;
-    position: relative;
-    box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
-    transform: rotate(1deg); /* Leve inclinação característica */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-bottom-right-radius: 60px 5px; /* Efeito de ponta do papel levantada */
+    padding: 2rem; width: 480px; min-height: 520px;
+    position: relative; box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+    transform: rotate(1deg); display: flex; flex-direction: column;
+    justify-content: center; border-bottom-right-radius: 60px 5px;
 }
 
-/* Variação de cores para outras telas */
-#game-over-screen { background: var(--postit-pink); transform: rotate(-1deg); }
-#start-screen { background: var(--postit-yellow); }
+.game-title { font-family: 'Gochi Hand', cursive; font-size: 3.5rem; text-align: center; margin-bottom: 20px; }
+.game-title-mini { font-family: 'Gochi Hand', cursive; font-size: 2rem; text-align: center; }
 
-.top-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    font-family: 'Gochi Hand', cursive;
-    font-size: 1.4rem;
+.postit-button {
+    font-family: 'Gochi Hand', cursive; font-size: 1.6rem;
+    background: #eb8aeb; border: none; padding: 15px;
+    cursor: pointer; box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    margin: 10px auto; display: block; width: 85%; color: white;
 }
 
-.lives-container { display: flex; gap: 5px; }
-.life-img { width: 30px; height: 30px; object-fit: contain; }
-
-.timer-wrapper { 
-    width: 100%; height: 8px; background: rgba(0,0,0,0.1); 
-    border-radius: 4px; margin-bottom: 15px; overflow: hidden; 
-}
-#timer-bar { width: 100%; height: 100%; background: #333; }
-
-.badge { 
-    padding: 2px 10px; background: rgba(0,0,0,0.05); 
-    border: 1px dashed #333; font-family: 'Gochi Hand', cursive;
-    font-size: 1.1rem; color: #333; display: inline-block; margin: 0 auto;
-}
-
-#question { 
-    font-family: 'Gochi Hand', cursive;
-    font-size: 1.6rem; margin: 20px 0; min-height: 80px; 
-    display: flex; align-items: center; justify-content: center;
-    line-height: 1.2;
-}
-
-#game-over-screen { 
-    font-family: 'Gochi Hand', cursive;
-    font-size: 1.6rem; margin: 20px 0; min-height: 80px; 
-    display: flex; align-items: center; justify-content: center;
-    line-height: 1.2;
-}
-
-
-/* Estilo dos quadradinhos de dígito estilo Post-it */
 .digit-input { 
-    
     width: 45px; height: 60px; font-size: 2rem; text-align: center; 
     border: none; border-bottom: 2px solid #333; background: transparent;
-    outline: none; font-family: 'Gochi Hand', cursive;
+    outline: none; font-family: 'Gochi Hand', cursive; margin: 5px;
 }
 
-/* Efeito de foco quando o aluno está digitando naquele quadrado */
-.digit-input:focus {
-    border-color: var(--text);
-    transform: scale(1.03); /* Leve aumento para indicar onde está o cursor */
-}
-
-/* Quando houver erro, os quadradinhos ficam vermelhos */
-.digit-input.anim-error { 
-    border-color: var(--error) !important;
-    background: rgba(214, 48, 49, 0.1);
-    color: var(--error);
-}
-
+.top-info { display: flex; justify-content: space-between; font-family: 'Gochi Hand'; font-size: 1.5rem; }
+.timer-wrapper { width: 100%; height: 10px; background: rgba(0,0,0,0.1); margin: 15px 0; border-radius: 5px; }
+#timer-bar { width: 100%; height: 100%; background: #333; transition: width 0.1s linear; }
+.badge { font-family: 'Gochi Hand'; border: 1px dashed #333; padding: 2px 10px; align-self: center; }
+#question { font-family: 'Gochi Hand'; font-size: 1.8rem; margin: 20px 0; text-align: center; }
+#inputs-container { display: flex; justify-content: center; }
 .hidden { display: none !important; }
-
-/* Loader estilizado */
 .loader-bar { width: 100%; height: 10px; background: rgba(0,0,0,0.1); border-radius: 5px; }
 #load-progress { width: 0%; height: 100%; background: var(--postit-pink); }
-
-/* Estilo da Foto do Recordista */
-#photo-winner img { 
-    width: 240px; height: 200px; border: 2px solid #333; 
-    padding: 5px; background: white; transform: rotate(-3deg);
-    box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-}
-#photo-winner {text-align: center;}
-.highscore-text {text-align: center;}
-
-.game-title-mini  {text-align: center;}
-
-.shortcut {
-    margin-top: 40px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 11px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #242424;
-    text-align: center;
-    opacity: 0.8;
-    display: none; 
-}
-
-footer {
-    font-size: 10px;
-    color: #353535;
-    text-align: center;
-    line-height: 1;
-    opacity: 0.6;
-    transition: font-size 0.2s ease; 
-}
-
-footer:hover {
-    font-size: 12px;
-    opacity: 1.0;
-    margin-top: 8px;
-}
-
-/* Botão Estilo Post-it */
-.postit-button {
-    font-family: 'Gochi Hand', cursive;
-    font-size: 1.6rem;
-    background: #eb8aeb;
-    border: none;
-    padding: 15px 25px;
-    cursor: pointer;
-    box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
-    transform: rotate(-1deg);
-    transition: all 0.2s;
-    margin: 20px auto;
-    display: block;
-    color: white;
-}
-
-.postit-button:hover {
-    transform: scale(1.05) rotate(1deg);
-    background: #ff5eab;
-}
-
-
-
-@keyframes shake { 0%,100%{transform: translateX(0) rotate(1deg)} 25%{transform: translateX(-5px) rotate(1deg)} 75%{transform: translateX(5px) rotate(1deg)} }
-.anim-error { animation: shake 0.4s; color: red !important; }

@@ -17,7 +17,7 @@ const charadasLogicasOriginal = [
     {q: "Quanto é 10 menos 10 dividido por 10?", a: "9"},
     {q: "Quantos lados têm dois quadrados?", a: "8"},
     {q: "Se 5 máquinas fazem 5 peças em 5 minutos, quanto tempo 100 máquinas levam para fazer 100 peças?", a: "5"},
-    {q: "Se eu ganho R$ 37,00 por dia trabalhado e trabalho 3 dias por semana, quanto recebi no último mês?", a: "296"},
+    {q: "Se eu ganho R$ 37,00 por dia trabalhado e trabalho 3 dias por semana, quanto recebi no último mês, que teve 31 dias, considerando que faltei 3 dias sem justificativa e que em 2 dias trabalhei apenas metade do período?", a: "296"},
     {q: "Um fazendeiro tem 17 vacas e todas morrem menos 9. Quantas ficam vivas?", a: "9"},
     {q: "Quanto é a terça parte de 6 mais 2?", a: "4"},
     {q: "Quantos anos têm uma década e meia?", a: "15"},
@@ -63,89 +63,27 @@ const charadasLogicasOriginal = [
     {q: "Quanto é 64 dividido por 8?", a: "8"}
 ];
 
-let configAcess = { fonteGrande: false, altoContraste: false, narracao: false };
-let score = 0, lives = 5, currentAnswer = "", timer = null, timeLeft = 0, totalTime = 0, filaCharadas = [];
-
-// --- SISTEMA DE ACESSIBILIDADE TUX ---
-
-function tuxDiz(texto) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(texto);
-    utterance.lang = 'pt-BR';
-    window.speechSynthesis.speak(utterance);
-}
+let filaCharadas = [];
+let score = 0;
+let lives = 5;
+let currentAnswer = "";
+let timer = null;
+let timeLeft = 0;
+let totalTime = 0;
 
 window.onload = () => {
     loadHighScore();
-    iniciarSetupTux();
+    
+    const btn = document.getElementById('btn-start');
+    btn.addEventListener('click', iniciarProcesso);
+
+    window.addEventListener('keydown', (e) => {
+        const startScreen = document.getElementById('start-screen');
+        if (!startScreen.classList.contains('hidden') && e.key === '5') {
+            iniciarProcesso();
+        }
+    });
 };
-
-function iniciarSetupTux() {
-    const container = document.getElementById('setup-container');
-    tuxDiz("Seja bem vindo ao Gênio Matemático, eu sou Tux, seu assistente de acessibilidade!, você poderá alterar o tamanho da fonte, o contraste e usar audiodescrição. Marque as opções para ajustar seu nível de acessibilidade e bom jogo!");
-
-    const passoFonte = () => {
-        container.innerHTML = `
-            <p class="game-title-mini">Você prefere a fonte em tamanho:</p>
-            <button class="postit-button" id="f1">1 . NORMAL</button>
-            <button class="postit-button" id="f2" style="font-size: 2rem;">2. GRANDE</button>
-        `;
-        tuxDiz("Você prefere a fonte em tamanho: 1 normal ou 2 grande?");
-        const selecionar = (val) => {
-            if(val === 2) { configAcess.fonteGrande = true; document.body.classList.add('font-grande'); }
-            window.removeEventListener('keydown', tecla); passoContraste();
-        };
-        const tecla = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
-        document.getElementById('f1').onclick = () => selecionar(1);
-        document.getElementById('f2').onclick = () => selecionar(2);
-        window.addEventListener('keydown', tecla);
-    };
-
-    const passoContraste = () => {
-        container.innerHTML = `
-            <p class="game-title-mini">Você prefere as cores:</p>
-            <button class="postit-button" id="c1">1. ORIGINAIS DO JOGO</button>
-            <button class="postit-button" id="c2" style="background:#000; color:#fff; border:2px solid #fff">2. ALTO CONTRASTE</button>
-        `;
-        tuxDiz("Você prefere as cores: 1 originais do jogo ou 2 alto contraste?");
-        const selecionar = (val) => {
-            if(val === 2) { configAcess.altoContraste = true; document.body.classList.add('high-contrast'); }
-            window.removeEventListener('keydown', tecla); passoNarrador();
-        };
-        const tecla = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
-        document.getElementById('c1').onclick = () => selecionar(1);
-        document.getElementById('c2').onclick = () => selecionar(2);
-        window.addEventListener('keydown', tecla);
-    };
-
-    const passoNarrador = () => {
-        container.innerHTML = `
-            <p class="game-title-mini">Você deseja utilizar o narrador com audiodescrição?</p>
-            <button class="postit-button" id="n1">1. SIM</button>
-            <button class="postit-button" id="n2">2. NÃO</button>
-        `;
-        tuxDiz("Você deseja utilizar o narrador com audiodescrição? 1 sim ou 2 não?");
-        const selecionar = (val) => {
-            configAcess.narracao = (val === 1);
-            window.removeEventListener('keydown', tecla); finalizarSetup();
-        };
-        const tecla = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
-        document.getElementById('n1').onclick = () => selecionar(1);
-        document.getElementById('n2').onclick = () => selecionar(2);
-        window.addEventListener('keydown', tecla);
-    };
-
-    const finalizarSetup = () => {
-        document.getElementById('setup-screen').classList.add('hidden');
-        document.getElementById('start-screen').classList.remove('hidden');
-        document.getElementById('btn-start').onclick = iniciarProcesso;
-        window.onkeydown = (e) => { if(e.key === '5') iniciarProcesso(); };
-    };
-
-    passoFonte();
-}
-
-// --- LÓGICA DO JOGO ---
 
 function loadHighScore() {
     const high = localStorage.getItem('math_record');
@@ -153,34 +91,47 @@ function loadHighScore() {
     if (high) {
         document.getElementById('ranking-container').classList.remove('hidden');
         document.getElementById('high-score-val').innerText = high;
-        if (photo) document.getElementById('photo-winner').innerHTML = `<img src="${photo}">`;
+        if (photo) {
+            document.getElementById('photo-winner').innerHTML = `<img src="${photo}">`;
+        }
     }
 }
 
 function iniciarProcesso() {
     document.getElementById('btn-start').classList.add('hidden');
     document.getElementById('loader-section').classList.remove('hidden');
-    let p = 0;
-    const interval = setInterval(() => {
-        p += 5; document.getElementById('load-progress').style.width = p + "%";
-        if (p >= 100) { clearInterval(interval); startGame(); }
-    }, 50);
+    
+    let loadPercent = 0;
+    const loadBar = document.getElementById('load-progress');
+    const loading = setInterval(() => {
+        loadPercent += 2;
+        if (loadBar) loadBar.style.width = loadPercent + "%";
+        if (loadPercent >= 100) {
+            clearInterval(loading);
+            startGame();
+        }
+    }, 40);
 }
 
 function startGame() {
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('game-screen').classList.remove('hidden');
-    score = 0; lives = 5; filaCharadas = [...charadasLogicasOriginal];
-    updateUI(); nextQuestion();
+    score = 0;
+    lives = 5;
+    filaCharadas = [...charadasLogicasOriginal];
+    updateUI();
+    nextQuestion();
 }
 
 function nextQuestion() {
     const isHard = Math.random() > 0.6;
     let qObj;
 
+    if (filaCharadas.length === 0) filaCharadas = [...charadasLogicasOriginal];
+
     if (isHard && filaCharadas.length > 0) {
-        const idx = Math.floor(Math.random() * filaCharadas.length);
-        qObj = filaCharadas.splice(idx, 1)[0];
+        const index = Math.floor(Math.random() * filaCharadas.length);
+        qObj = filaCharadas.splice(index, 1)[0];
         totalTime = 180;
         document.getElementById('badge').innerText = "CHARADA - 3 MIN";
     } else {
@@ -192,6 +143,7 @@ function nextQuestion() {
             res = (op === '+') ? (n1 + n2) : (n1 * n2);
             resStr = res.toString();
         } while (resStr.includes('0'));
+
         qObj = { q: `Quanto é ${n1} ${op === '*' ? '×' : '+'} ${n2}?`, a: resStr };
         totalTime = 60;
         document.getElementById('badge').innerText = "CÁLCULO - 1 MIN";
@@ -199,8 +151,6 @@ function nextQuestion() {
 
     currentAnswer = qObj.a;
     document.getElementById('question').innerText = qObj.q;
-    if(configAcess.narracao) tuxDiz(qObj.q);
-    
     timeLeft = totalTime;
     createInputs(currentAnswer.length);
     startCountdown();
@@ -211,15 +161,34 @@ function createInputs(len) {
     container.innerHTML = '';
     for (let i = 0; i < len; i++) {
         const input = document.createElement('input');
-        input.type = 'tel'; input.className = 'digit-input'; input.maxLength = 1;
-        input.oninput = (e) => {
+        input.type = 'tel';
+        input.className = 'digit-input';
+        input.maxLength = 1;
+        input.addEventListener('input', (e) => {
             e.target.value = e.target.value.replace(/[^1-9]/g, '');
-            if (e.target.value && e.target.nextElementSibling) e.target.nextElementSibling.focus();
+            if (e.target.value && e.target.nextElementSibling) {
+                e.target.nextElementSibling.focus();
+            }
             checkAttempt();
-        };
+        });
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !e.target.value && e.target.previousElementSibling) {
+                e.target.previousElementSibling.focus();
+            }
+        });
         container.appendChild(input);
     }
-    container.firstChild.focus();
+    if (container.firstChild) container.firstChild.focus();
+}
+
+function startCountdown() {
+    if (timer) clearInterval(timer);
+    timer = setInterval(() => {
+        timeLeft -= 0.1;
+        const progressBar = document.getElementById('timer-bar');
+        if (progressBar) progressBar.style.width = (timeLeft / totalTime * 100) + "%";
+        if (timeLeft <= 0) handleError();
+    }, 100);
 }
 
 function checkAttempt() {
@@ -228,9 +197,9 @@ function checkAttempt() {
     if (val.length === currentAnswer.length) {
         if (val === currentAnswer) {
             score += (totalTime > 60 ? 15 : 10);
-            if(configAcess.narracao) tuxDiz("Correto");
-            updateUI(); playSound(600, 0.1);
-            setTimeout(nextQuestion, 500);
+            updateUI();
+            playSound(600, 0.1);
+            setTimeout(nextQuestion, 400);
         } else {
             handleError();
         }
@@ -240,59 +209,71 @@ function checkAttempt() {
 function handleError() {
     clearInterval(timer);
     lives--;
-    updateUI(); playSound(150, 0.3);
-    if(configAcess.narracao) tuxDiz(`Incorreto. Você tem ${lives} vidas.`);
-    
-    if (lives <= 0) setTimeout(endGame, 600);
-    else setTimeout(nextQuestion, 600);
+    updateUI();
+    playSound(150, 0.3);
+    document.querySelectorAll('.digit-input').forEach(i => i.classList.add('anim-error'));
+    setTimeout(() => {
+        if (lives <= 0) endGame();
+        else nextQuestion();
+    }, 600);
 }
 
 function updateUI() {
-    document.getElementById('current-score').innerText = score;
-    const display = document.getElementById('lives-display');
-    display.innerHTML = '';
-    // RESTAURAÇÃO DA LÓGICA ORIGINAL DE VIDAS (CORAÇÕES)
-    for (let i = 0; i < lives; i++) {
-        const img = document.createElement('img');
-        img.src = 'https://cdn-icons-png.flaticon.com/512/833/833472.png';
-        img.className = 'life-img';
-        img.style.width = '30px';
-        img.style.marginRight = '5px';
-        display.appendChild(img);
+    const livesDisplay = document.getElementById('lives-display');
+    if (livesDisplay) {
+        livesDisplay.innerHTML = '';
+        for (let i = 0; i < lives; i++) {
+            const img = document.createElement('img');
+            img.src = 'img/vida.png';
+            img.className = 'life-img';
+            img.onerror = () => { img.alt = "❤️"; };
+            livesDisplay.appendChild(img);
+        }
     }
+    const scoreEl = document.getElementById('current-score');
+    if (scoreEl) scoreEl.innerText = score;
 }
 
 function endGame() {
-    clearInterval(timer);
+    if (timer) clearInterval(timer);
     document.getElementById('game-screen').classList.add('hidden');
     document.getElementById('game-over-screen').classList.remove('hidden');
     document.getElementById('final-score').innerText = score;
-
-    if(configAcess.narracao) tuxDiz(`Você perdeu e sua pontuação foi ${score}`);
 
     const high = localStorage.getItem('math_record') || 0;
     if (score > parseInt(high)) {
         localStorage.setItem('math_record', score);
         document.getElementById('new-record-msg').classList.remove('hidden');
-        if(configAcess.narracao) tuxDiz("Parabéns! você é o maior pontuador! agora faça uma pose que vamos bater uma foto sua!");
         takeSnap();
     }
-    
-    let countdown = 6;
-    const itv = setInterval(() => {
-        countdown--;
-        document.getElementById('return-timer').innerText = countdown;
-        if(countdown <= 0) { clearInterval(itv); location.reload(); }
+
+    let ret = 6;
+    const retTimerEl = document.getElementById('return-timer');
+    const retInt = setInterval(() => {
+        ret--;
+        if (retTimerEl) retTimerEl.innerText = ret;
+        if (ret <= 0) {
+            clearInterval(retInt);
+            location.reload();
+        }
     }, 1000);
 }
 
-function startCountdown() {
-    if (timer) clearInterval(timer);
-    timer = setInterval(() => {
-        timeLeft -= 0.1;
-        document.getElementById('timer-bar').style.width = (timeLeft / totalTime * 100) + "%";
-        if (timeLeft <= 0) handleError();
-    }, 100);
+async function takeSnap() {
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('canvas');
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.classList.remove('hidden');
+        video.srcObject = stream;
+        setTimeout(() => {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, 300, 225);
+            localStorage.setItem('winner_photo', canvas.toDataURL('image/png'));
+            stream.getTracks().forEach(t => t.stop());
+            video.classList.add('hidden');
+        }, 2000);
+    } catch (e) { console.warn("Câmera indisponível"); }
 }
 
 function playSound(freq, duration) {
@@ -308,17 +289,15 @@ function playSound(freq, duration) {
     } catch (e) { }
 }
 
-async function takeSnap() {
-    const video = document.getElementById('webcam');
-    const canvas = document.getElementById('canvas');
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.classList.remove('hidden'); video.srcObject = stream;
-        setTimeout(() => {
-            canvas.getContext('2d').drawImage(video, 0, 0, 300, 225);
-            localStorage.setItem('winner_photo', canvas.toDataURL('image/png'));
-            stream.getTracks().forEach(t => t.stop());
-            video.classList.add('hidden');
-        }, 2500);
-    } catch (e) { }
-}
+const teclasPressionadas = { '1': false, '2': false, '3': false };
+window.addEventListener('keydown', (e) => {
+    if (e.key in teclasPressionadas) {
+        teclasPressionadas[e.key] = true;
+        if (teclasPressionadas['1'] && teclasPressionadas['2'] && teclasPressionadas['3']) {
+            window.location.href = "https://juniorcriste.github.io/Painel-Interativo/";
+        }
+    }
+});
+window.addEventListener('keyup', (e) => {
+    if (e.key in teclasPressionadas) teclasPressionadas[e.key] = false;
+});
