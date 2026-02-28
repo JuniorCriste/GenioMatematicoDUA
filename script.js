@@ -82,7 +82,7 @@ window.onload = () => {
 function iniciarFluxoAcessibilidade() {
     const container = document.getElementById('setup-container');
     container.innerHTML = '<p class="game-title-mini">Ouvindo o Tux...</p>';
-    tuxDiz("Seja bem-vindo ao Gênio Matemático! Escolha o tamanho da fonte: 1 normal ou 2 grande.", () => passoFonte());
+    tuxDiz("Escolha o tamanho da fonte: 1 normal ou 2 grande.", () => passoFonte());
 }
 
 function passoFonte() {
@@ -94,10 +94,13 @@ function passoFonte() {
     `;
     const selecionar = (v) => {
         if(v === 2) { configAcess.fonteGrande = true; document.body.classList.add('font-grande'); }
+        window.onkeydown = null; // Limpa tecla anterior
         passoContraste();
     };
     document.getElementById('f1').onclick = () => selecionar(1);
     document.getElementById('f2').onclick = () => selecionar(2);
+    // Ativa teclado 1 e 2
+    window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
 }
 
 function passoContraste() {
@@ -110,10 +113,12 @@ function passoContraste() {
     tuxDiz("Cores: 1 padrão ou 2 alto contraste.");
     const selecionar = (v) => {
         if(v === 2) { configAcess.altoContraste = true; document.body.classList.add('high-contrast'); }
+        window.onkeydown = null;
         passoNarrador();
     };
     document.getElementById('c1').onclick = () => selecionar(1);
     document.getElementById('c2').onclick = () => selecionar(2);
+    window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
 }
 
 function passoNarrador() {
@@ -126,19 +131,24 @@ function passoNarrador() {
     tuxDiz("Ativar narrador? 1 sim ou 2 não.");
     const selecionar = (v) => {
         configAcess.narracao = (v === 1);
+        window.onkeydown = null;
         finalizarSetup();
     };
     document.getElementById('n1').onclick = () => selecionar(1);
     document.getElementById('n2').onclick = () => selecionar(2);
+    window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
 }
 
 function finalizarSetup() {
     document.getElementById('setup-screen').classList.add('hidden');
     document.getElementById('start-screen').classList.remove('hidden');
     document.getElementById('btn-start').onclick = iniciarProcesso;
+    // Ativa teclado 5 para começar
+    window.onkeydown = (e) => { if(e.key === '5') iniciarProcesso(); };
 }
 
 function iniciarProcesso() {
+    window.onkeydown = null; // Desativa o 5 para não bugar o carregamento
     document.getElementById('btn-start').classList.add('hidden');
     document.getElementById('loader-section').classList.remove('hidden');
     let p = 0;
@@ -151,19 +161,14 @@ function iniciarProcesso() {
 function startGame() {
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('game-screen').classList.remove('hidden');
-    
-    // RESET ÚNICO
-    score = 0; 
-    lives = 5; 
+    score = 0; lives = 5; 
     filaCharadas = [...charadasLogicasOriginal];
-    
     updateUI(); 
     nextQuestion();
 }
 
 function nextQuestion() {
     if(timer) clearInterval(timer);
-    
     const isHard = Math.random() > 0.6 && filaCharadas.length > 0;
     let qObj;
 
@@ -224,7 +229,6 @@ function handleError() {
     lives--;
     updateUI(); 
     playSound(150, 0.3);
-    
     if(configAcess.narracao) {
         tuxDiz(`Errado! Você tem ${lives} vidas.`, () => {
             if (lives <= 0) endGame(); else nextQuestion();
@@ -259,10 +263,8 @@ function endGame() {
     document.getElementById('game-screen').classList.add('hidden');
     document.getElementById('game-over-screen').classList.remove('hidden');
     document.getElementById('final-score').innerText = score;
-    
     const high = localStorage.getItem('math_record') || 0;
     if (score > parseInt(high)) localStorage.setItem('math_record', score);
-    
     setTimeout(() => location.reload(), 5000);
 }
 
