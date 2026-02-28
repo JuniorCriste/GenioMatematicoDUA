@@ -3,23 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gênio Matemático - Edição Acessível</title>
+    <title>Gênio Matemático</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="start-screen" class="screen">
+    <div id="setup-screen" class="screen">
         <h1 class="game-title">Gênio Matemático</h1>
-        
-        <div id="setup-content"></div>
+        <div id="setup-container">
+            </div>
+    </div>
 
+    <div id="start-screen" class="screen hidden">
+        <h1 class="game-title">Gênio Matemático</h1>
         <div id="loader-section" class="hidden">
-            <p style="font-family: 'Gochi Hand';">Carregando desafio...</p>
+            <p style="font-family: 'Gochi Hand'; text-align: center;">Carregando desafio...</p>
             <div class="loader-bar"><div id="load-progress"></div></div>
         </div>
-
+        <button id="btn-start" class="postit-button">JOGAR (Pressione 5)</button>
         <div id="ranking-container" class="hidden">
-            <p class="highscore-text">Recorde: <span id="high-score-val">0</span></p>
+            <p class="highscore-text">Recorde Atual: <span id="high-score-val">0</span></p>
             <div id="photo-winner"></div>
         </div>
     </div>
@@ -37,10 +40,10 @@
 
     <div id="game-over-screen" class="screen hidden">
         <h2 class="game-title-mini">FIM DE JOGO</h2>
-        <p>Pontuação: <span id="final-score">0</span></p>
-        <p id="new-record-msg" class="hidden">🏆 NOVO RECORDE! 🏆</p>
-        <p>Reiniciando em <span id="return-timer">6</span>...</p>
-        <video id="webcam" width="300" height="225" autoplay class="hidden"></video>
+        <p style="text-align: center;">Sua pontuação: <span id="final-score">0</span></p>
+        <p id="new-record-msg" class="hidden" style="text-align: center; color: #ff7eb9;">🏆 NOVO RECORDE! 🏆</p>
+        <p style="text-align: center;">Reiniciando em <span id="return-timer">6</span>...</p>
+        <video id="webcam" width="300" height="225" autoplay class="hidden" style="margin: 0 auto; display: block; border-radius: 10px;"></video>
         <canvas id="canvas" width="300" height="225" class="hidden"></canvas>
     </div>
 
