@@ -1,5 +1,11 @@
-## Gênio Matemático
-#### Junior Criste
+## Gênio Matemático (DUA)
+#### Versão para trabalho apresentado ao IFES - Polo Ecoporanga. 
+#### Curso de Pós-Graduação Lato Sensu em Informática na Educação
+#### Disciplina Acessibilidade Digital e Inclusão em Ambientes Educacionais
+#### Atividade 5 - Planejamento e Produção de Material #### Educacional Digital Acessível
+
+![alt text](img/Genio%20MatematicoDUA.png)
+
 
 ##### Ranking de melhor jogador ![alt text](img/prints/Genio%20Matematico.png)
 
