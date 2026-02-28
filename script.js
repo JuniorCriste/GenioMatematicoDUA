@@ -87,35 +87,17 @@ function iniciarFluxoAcessibilidade() {
 
 function passoFonte() {
     const container = document.getElementById('setup-container');
-    container.innerHTML = `
-        <p class="game-title-mini">Tamanho da fonte:</p>
-        <button class="postit-button" id="f1">1. NORMAL</button>
-        <button class="postit-button" id="f2">2. GRANDE</button>
-    `;
-    const selecionar = (v) => {
-        if(v === 2) { configAcess.fonteGrande = true; document.body.classList.add('font-grande'); }
-        window.onkeydown = null; // Limpa tecla anterior
-        passoContraste();
-    };
+    container.innerHTML = `<p class="game-title-mini">Fonte:</p><button class="postit-button" id="f1">1. NORMAL</button><button class="postit-button" id="f2">2. GRANDE</button>`;
+    const selecionar = (v) => { if(v === 2) { configAcess.fonteGrande = true; document.body.classList.add('font-grande'); } passoContraste(); };
     document.getElementById('f1').onclick = () => selecionar(1);
     document.getElementById('f2').onclick = () => selecionar(2);
-    // Ativa teclado 1 e 2
     window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
 }
 
 function passoContraste() {
     const container = document.getElementById('setup-container');
-    container.innerHTML = `
-        <p class="game-title-mini">Cores:</p>
-        <button class="postit-button" id="c1">1. PADRÃO</button>
-        <button class="postit-button" id="c2" style="background:#000; color:#fff;">2. ALTO CONTRASTE</button>
-    `;
-    tuxDiz("Cores: 1 padrão ou 2 alto contraste.");
-    const selecionar = (v) => {
-        if(v === 2) { configAcess.altoContraste = true; document.body.classList.add('high-contrast'); }
-        window.onkeydown = null;
-        passoNarrador();
-    };
+    container.innerHTML = `<p class="game-title-mini">Cores:</p><button class="postit-button" id="c1">1. PADRÃO</button><button class="postit-button" id="c2" style="background:#000; color:#fff;">2. ALTO CONTRASTE</button>`;
+    const selecionar = (v) => { if(v === 2) { configAcess.altoContraste = true; document.body.classList.add('high-contrast'); } passoNarrador(); };
     document.getElementById('c1').onclick = () => selecionar(1);
     document.getElementById('c2').onclick = () => selecionar(2);
     window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
@@ -123,17 +105,8 @@ function passoContraste() {
 
 function passoNarrador() {
     const container = document.getElementById('setup-container');
-    container.innerHTML = `
-        <p class="game-title-mini">Ativar Narrador?</p>
-        <button class="postit-button" id="n1">1. SIM</button>
-        <button class="postit-button" id="n2">2. NÃO</button>
-    `;
-    tuxDiz("Ativar narrador? 1 sim ou 2 não.");
-    const selecionar = (v) => {
-        configAcess.narracao = (v === 1);
-        window.onkeydown = null;
-        finalizarSetup();
-    };
+    container.innerHTML = `<p class="game-title-mini">Narrador?</p><button class="postit-button" id="n1">1. SIM</button><button class="postit-button" id="n2">2. NÃO</button>`;
+    const selecionar = (v) => { configAcess.narracao = (v === 1); finalizarSetup(); };
     document.getElementById('n1').onclick = () => selecionar(1);
     document.getElementById('n2').onclick = () => selecionar(2);
     window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
@@ -143,12 +116,11 @@ function finalizarSetup() {
     document.getElementById('setup-screen').classList.add('hidden');
     document.getElementById('start-screen').classList.remove('hidden');
     document.getElementById('btn-start').onclick = iniciarProcesso;
-    // Ativa teclado 5 para começar
     window.onkeydown = (e) => { if(e.key === '5') iniciarProcesso(); };
 }
 
 function iniciarProcesso() {
-    window.onkeydown = null; // Desativa o 5 para não bugar o carregamento
+    window.onkeydown = null;
     document.getElementById('btn-start').classList.add('hidden');
     document.getElementById('loader-section').classList.remove('hidden');
     let p = 0;
@@ -163,31 +135,25 @@ function startGame() {
     document.getElementById('game-screen').classList.remove('hidden');
     score = 0; lives = 5; 
     filaCharadas = [...charadasLogicasOriginal];
-    updateUI(); 
-    nextQuestion();
+    updateUI(); nextQuestion();
 }
 
 function nextQuestion() {
     if(timer) clearInterval(timer);
     const isHard = Math.random() > 0.6 && filaCharadas.length > 0;
     let qObj;
-
     if (isHard) {
         const idx = Math.floor(Math.random() * filaCharadas.length);
         qObj = filaCharadas.splice(idx, 1)[0];
-        totalTime = 180; 
-        document.getElementById('badge').innerText = "CHARADA - 3 MIN";
+        totalTime = 180; document.getElementById('badge').innerText = "CHARADA";
     } else {
         let n1 = Math.floor(Math.random() * 20) + 2, n2 = Math.floor(Math.random() * 9) + 2;
         qObj = { q: `Quanto é ${n1} + ${n2}?`, a: (n1 + n2).toString() };
-        totalTime = 60; 
-        document.getElementById('badge').innerText = "CÁLCULO - 1 MIN";
+        totalTime = 60; document.getElementById('badge').innerText = "CÁLCULO";
     }
-
     currentAnswer = qObj.a;
     document.getElementById('question').innerText = qObj.q;
     if(configAcess.narracao) tuxDiz(qObj.q);
-    
     timeLeft = totalTime;
     createInputs(currentAnswer.length);
     startCountdown();
@@ -215,20 +181,16 @@ function checkAttempt() {
     if (val.length === currentAnswer.length) {
         if (val === currentAnswer) {
             score += (totalTime > 60 ? 15 : 10);
-            updateUI(); 
-            playSound(600, 0.1);
+            updateUI(); playSound(600, 0.1);
             setTimeout(nextQuestion, 600);
-        } else {
-            handleError();
-        }
+        } else { handleError(); }
     }
 }
 
 function handleError() {
     clearInterval(timer);
     lives--;
-    updateUI(); 
-    playSound(150, 0.3);
+    updateUI(); playSound(150, 0.3);
     if(configAcess.narracao) {
         tuxDiz(`Errado! Você tem ${lives} vidas.`, () => {
             if (lives <= 0) endGame(); else nextQuestion();
@@ -258,14 +220,54 @@ function startCountdown() {
     }, 100);
 }
 
-function endGame() {
+async function endGame() {
     clearInterval(timer);
     document.getElementById('game-screen').classList.add('hidden');
     document.getElementById('game-over-screen').classList.remove('hidden');
     document.getElementById('final-score').innerText = score;
+
     const high = localStorage.getItem('math_record') || 0;
-    if (score > parseInt(high)) localStorage.setItem('math_record', score);
-    setTimeout(() => location.reload(), 5000);
+    const isNewRecord = score > parseInt(high);
+
+    if (isNewRecord) {
+        localStorage.setItem('math_record', score);
+        document.getElementById('msg-final').innerText = "NOVO RECORDE!";
+        tuxDiz("Parabéns! você é o novo Gênio da matemática, pose para foto!", () => tirarFoto());
+    } else {
+        document.getElementById('msg-final').innerText = "TENTE NOVAMENTE";
+        tuxDiz("Você perdeu! e sua pontuação total foi de " + score);
+        setTimeout(() => location.reload(), 6000);
+    }
+}
+
+async function tirarFoto() {
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('photo-canvas');
+    video.classList.remove('hidden');
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+        
+        // Espera 3 segundos para o jogador posar
+        setTimeout(() => {
+            const context = canvas.getContext('2d');
+            // Desenha a imagem espelhada (como no vídeo)
+            context.translate(300, 0);
+            context.scale(-1, 1);
+            context.drawImage(video, 0, 0, 300, 225);
+            
+            localStorage.setItem('math_photo', canvas.toDataURL('image/png'));
+            
+            // Para a câmera
+            stream.getTracks().forEach(track => track.stop());
+            video.classList.add('hidden');
+            tuxDiz("Foto capturada!", () => setTimeout(() => location.reload(), 3000));
+        }, 3000);
+    } catch (e) {
+        console.error("Erro na câmera:", e);
+        setTimeout(() => location.reload(), 3000);
+    }
 }
 
 function playSound(freq, dur) {
@@ -282,8 +284,12 @@ function playSound(freq, dur) {
 
 function loadHighScore() {
     const high = localStorage.getItem('math_record');
+    const photo = localStorage.getItem('math_photo');
     if (high) {
         document.getElementById('ranking-container').classList.remove('hidden');
         document.getElementById('high-score-val').innerText = high;
+        if (photo) {
+            document.getElementById('photo-winner').innerHTML = `<img src="${photo}" alt="Foto do recordista">`;
+        }
     }
 }

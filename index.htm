@@ -25,6 +25,7 @@
         <button id="btn-start" class="postit-button">JOGAR (Pressione 5)</button>
         <div id="ranking-container" class="hidden">
             <p class="highscore-text">Recorde: <span id="high-score-val">0</span></p>
+            <div id="photo-winner"></div>
         </div>
     </div>
 
@@ -41,8 +42,10 @@
 
     <div id="game-over-screen" class="screen hidden">
         <h2 class="game-title-mini">FIM DE JOGO</h2>
+        <video id="webcam" autoplay playsinline class="hidden" style="width: 100%; border-radius: 10px; transform: scaleX(-1);"></video>
+        <canvas id="photo-canvas" class="hidden" width="300" height="225"></canvas>
+        <p id="msg-final" style="text-align: center; font-weight: bold;"></p>
         <p style="text-align: center;">Pontuação Final: <span id="final-score">0</span></p>
-        <p style="text-align: center;">Reiniciando em instantes...</p>
     </div>
 
     <script src="script.js"></script>
