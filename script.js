@@ -63,7 +63,6 @@ const charadasLogicasOriginal = [
     {q: "Quanto é 64 dividido por 8?", a: "8"}
 ];
 
-// VARIÁVEIS GLOBAIS
 let configAcess = { fonteGrande: false, altoContraste: false, narracao: false };
 let score = 0, lives = 5, currentAnswer = "", timer = null, timeLeft = 0, totalTime = 0, filaCharadas = [];
 
@@ -82,66 +81,63 @@ window.onload = () => {
 
 function iniciarBoasVindasTux() {
     const container = document.getElementById('setup-container');
-    const msgBoasVindas = "Seja bem vindo ao Gênio Matemático, eu sou Tux, seu assistente de acessibilidade!, você poderá alterar o tamanho da fonte, o contraste e usar audiodescrição. Marque as opções para ajustar seu nível de acessibilidade e bom jogo!";
+    const msg = "Seja bem vindo ao Gênio Matemático, eu sou Tux, seu assistente de acessibilidade!, você poderá alterar o tamanho da fonte, o contraste e usar audiodescrição. Marque as opções para ajustar seu nível de acessibilidade e bom jogo!";
     
-    // Narra as boas vindas e SÓ DEPOIS inicia as perguntas de setup
-    tuxDiz(msgBoasVindas, () => {
-        passoFonte();
-    });
+    tuxDiz(msg, () => passoFonte());
 }
 
 function passoFonte() {
     const container = document.getElementById('setup-container');
     container.innerHTML = `
-        <p class="game-title-mini">Você prefere a fonte em tamanho:</p>
+        <p class="game-title-mini">Tamanho da fonte:</p>
         <button class="postit-button" id="f1">1 . NORMAL</button>
         <button class="postit-button" id="f2" style="font-size: 2rem;">2. GRANDE</button>
     `;
     tuxDiz("Você prefere a fonte em tamanho: 1 normal ou 2 grande?");
     
-    const selecionar = (val) => {
+    const acao = (val) => {
         if(val === 2) { configAcess.fonteGrande = true; document.body.classList.add('font-grande'); }
         window.onkeydown = null; passoContraste();
     };
-    document.getElementById('f1').onclick = () => selecionar(1);
-    document.getElementById('f2').onclick = () => selecionar(2);
-    window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
+    document.getElementById('f1').onclick = () => acao(1);
+    document.getElementById('f2').onclick = () => acao(2);
+    window.onkeydown = (e) => { if(e.key==='1') acao(1); if(e.key==='2') acao(2); };
 }
 
 function passoContraste() {
     const container = document.getElementById('setup-container');
     container.innerHTML = `
-        <p class="game-title-mini">Você prefere as cores:</p>
-        <button class="postit-button" id="c1">1. ORIGINAIS DO JOGO</button>
-        <button class="postit-button" id="c2" style="background:#000; color:#fff; border:2px solid #fff">2. ALTO CONTRASTE</button>
+        <p class="game-title-mini">Cores:</p>
+        <button class="postit-button" id="c1">1. ORIGINAIS</button>
+        <button class="postit-button" id="c2" style="background:#000; color:#fff;">2. ALTO CONTRASTE</button>
     `;
-    tuxDiz("Você prefere as cores: 1 originais do jogo ou 2 alto contraste?");
+    tuxDiz("Cores: 1 originais ou 2 alto contraste?");
     
-    const selecionar = (val) => {
+    const acao = (val) => {
         if(val === 2) { configAcess.altoContraste = true; document.body.classList.add('high-contrast'); }
         window.onkeydown = null; passoNarrador();
     };
-    document.getElementById('c1').onclick = () => selecionar(1);
-    document.getElementById('c2').onclick = () => selecionar(2);
-    window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
+    document.getElementById('c1').onclick = () => acao(1);
+    document.getElementById('c2').onclick = () => acao(2);
+    window.onkeydown = (e) => { if(e.key==='1') acao(1); if(e.key==='2') acao(2); };
 }
 
 function passoNarrador() {
     const container = document.getElementById('setup-container');
     container.innerHTML = `
-        <p class="game-title-mini">Você deseja utilizar o narrador com audiodescrição?</p>
+        <p class="game-title-mini">Narrador com Audiodescrição?</p>
         <button class="postit-button" id="n1">1. SIM</button>
         <button class="postit-button" id="n2">2. NÃO</button>
     `;
-    tuxDiz("Você deseja utilizar o narrador com audiodescrição? 1 sim ou 2 não?");
+    tuxDiz("Deseja narrador? 1 sim ou 2 não?");
     
-    const selecionar = (val) => {
+    const acao = (val) => {
         configAcess.narracao = (val === 1);
         window.onkeydown = null; finalizarSetup();
     };
-    document.getElementById('n1').onclick = () => selecionar(1);
-    document.getElementById('n2').onclick = () => selecionar(2);
-    window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
+    document.getElementById('n1').onclick = () => acao(1);
+    document.getElementById('n2').onclick = () => acao(2);
+    window.onkeydown = (e) => { if(e.key==='1') acao(1); if(e.key==='2') acao(2); };
 }
 
 function finalizarSetup() {
@@ -164,9 +160,7 @@ function iniciarProcesso() {
 function startGame() {
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('game-screen').classList.remove('hidden');
-    // Reinicia pontuação e vidas APENAS no início do jogo total
-    score = 0; 
-    lives = 5; 
+    score = 0; lives = 5; 
     filaCharadas = [...charadasLogicasOriginal];
     updateUI(); 
     nextQuestion();
@@ -226,13 +220,9 @@ function checkAttempt() {
     if (val.length === currentAnswer.length) {
         if (val === currentAnswer) {
             score += (totalTime > 60 ? 15 : 10);
-            updateUI(); 
-            playSound(600, 0.1);
-            if(configAcess.narracao) {
-                tuxDiz("Correto", () => setTimeout(nextQuestion, 500));
-            } else {
-                setTimeout(nextQuestion, 500);
-            }
+            updateUI(); playSound(600, 0.1);
+            if(configAcess.narracao) tuxDiz("Correto", () => setTimeout(nextQuestion, 400));
+            else setTimeout(nextQuestion, 400);
         } else {
             handleError();
         }
@@ -242,17 +232,14 @@ function checkAttempt() {
 function handleError() {
     clearInterval(timer);
     lives--;
-    updateUI(); 
-    playSound(150, 0.3);
+    updateUI(); playSound(150, 0.3);
     
     if(configAcess.narracao) {
-        tuxDiz(`Incorreto. Você ainda tem ${lives} vidas.`, () => {
-            if (lives <= 0) endGame();
-            else nextQuestion();
+        tuxDiz(`Incorreto. Restam ${lives} vidas.`, () => {
+            if (lives <= 0) endGame(); else nextQuestion();
         });
     } else {
-        if (lives <= 0) setTimeout(endGame, 600);
-        else setTimeout(nextQuestion, 600);
+        if (lives <= 0) setTimeout(endGame, 600); else setTimeout(nextQuestion, 600);
     }
 }
 
@@ -264,8 +251,7 @@ function updateUI() {
         const img = document.createElement('img');
         img.src = 'https://cdn-icons-png.flaticon.com/512/833/833472.png';
         img.className = 'life-img';
-        img.style.width = '30px';
-        img.style.marginRight = '5px';
+        img.style.width = '30px'; img.style.marginRight = '5px';
         display.appendChild(img);
     }
 }
@@ -276,13 +262,10 @@ function endGame() {
     document.getElementById('game-over-screen').classList.remove('hidden');
     document.getElementById('final-score').innerText = score;
 
-    if(configAcess.narracao) tuxDiz(`Você perdeu e sua pontuação foi ${score}`);
-
     const high = localStorage.getItem('math_record') || 0;
     if (score > parseInt(high)) {
         localStorage.setItem('math_record', score);
         document.getElementById('new-record-msg').classList.remove('hidden');
-        if(configAcess.narracao) tuxDiz("Parabéns! você é o maior pontuador! agora faça uma pose que vamos bater uma foto sua!");
         takeSnap();
     }
     
@@ -309,8 +292,7 @@ function playSound(freq, duration) {
         const osc = ctx.createOscillator();
         const g = ctx.createGain();
         osc.connect(g); g.connect(ctx.destination);
-        osc.frequency.value = freq;
-        osc.start();
+        osc.frequency.value = freq; osc.start();
         g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + duration);
         osc.stop(ctx.currentTime + duration);
     } catch (e) { }
@@ -323,8 +305,7 @@ async function takeSnap() {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         video.classList.remove('hidden'); video.srcObject = stream;
         setTimeout(() => {
-            const context = canvas.getContext('2d');
-            context.drawImage(video, 0, 0, 300, 225);
+            canvas.getContext('2d').drawImage(video, 0, 0, 300, 225);
             localStorage.setItem('winner_photo', canvas.toDataURL('image/png'));
             stream.getTracks().forEach(t => t.stop());
             video.classList.add('hidden');
