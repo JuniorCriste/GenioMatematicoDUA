@@ -234,3 +234,50 @@ body.high-contrast #timer-bar { background: #fff !important; }
     border-radius: 10px;
     display: block;
 }
+
+
+/* --- RESPONSIVIDADE PARA CELULARES --- */
+
+@media (max-width: 600px) {
+    .screen {
+        width: 90vw; /* Usa 90% da largura da tela */
+        min-height: 500px;
+        padding: 1.5rem;
+        /* Reduz a escala geral para caber em telas muito pequenas */
+        transform: rotate(1deg) scale(0.9); 
+    }
+
+    .game-title {
+        font-size: 2.5rem !important; /* Título menor no celular */
+    }
+
+    #question {
+        font-size: 1.5rem;
+        min-height: 80px;
+    }
+
+    .digit-input {
+        width: 35px;
+        height: 50px;
+        font-size: 1.8rem;
+    }
+
+    .postit-button {
+        font-size: 1.4rem;
+        padding: 12px;
+    }
+
+    /* Ajuste para a foto do recordista não ocupar a tela toda */
+    #photo-winner img {
+        width: 140px;
+        height: 110px;
+    }
+}
+
+/* Para celulares muito pequenos (iPhone SE, etc) */
+@media (max-width: 380px) {
+    .screen {
+        transform: rotate(0deg) scale(0.8);
+        margin-top: -20px;
+    }
+}

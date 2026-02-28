@@ -160,8 +160,9 @@ function nextQuestion() {
 }
 
 function createInputs(len) {
-    const container = document.getElementById('inputs-container');
+   const container = document.getElementById('inputs-container');
     container.innerHTML = '';
+    container.style.flexWrap = 'nowrap';
     for (let i = 0; i < len; i++) {
         const input = document.createElement('input');
         input.type = 'tel'; input.className = 'digit-input'; input.maxLength = 1;
