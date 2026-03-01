@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gênio Matemático</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="setup-screen" class="screen">
+        <h1 class="game-title">Gênio Matemático</h1>
+        <div id="setup-container">
+            <p class="game-title-mini">Bem-vindo!</p>
+            <button id="btn-unlock" class="postit-button">CLIQUE PARA INICIAR</button>
+        </div>
+    </div>
+
+    <div id="start-screen" class="screen hidden">
+        <h1 class="game-title">Gênio Matemático</h1>
+        <div id="loader-section" class="hidden">
+            <p style="font-family: 'Gochi Hand'; text-align: center;">Carregando desafio...</p>
+            <div class="loader-bar"><div id="load-progress"></div></div>
+        </div>
+        <button id="btn-start" class="postit-button">JOGAR (Pressione 5)</button>
+        <div id="ranking-container" class="hidden">
+            <p class="highscore-text">Recorde: <span id="high-score-val">0</span></p>
+            <div id="photo-winner"></div>
+        </div>
+    </div>
+
+    <div id="game-screen" class="screen hidden">
+        <div class="top-info">
+            <div id="lives-display"></div>
+            <div>Score: <span id="current-score">0</span></div>
+        </div>
+        <div class="timer-wrapper"><div id="timer-bar"></div></div>
+        <div class="badge" id="badge">CÁLCULO</div>
+        <div id="question"></div>
+        <div id="inputs-container"></div>
+    </div>
+
+    <div id="game-over-screen" class="screen hidden">
+        <h2 class="game-title-mini">FIM DE JOGO</h2>
+        <video id="webcam" autoplay playsinline class="hidden" style="width: 100%; border-radius: 10px; transform: scaleX(-1);"></video>
+        <canvas id="photo-canvas" class="hidden" width="300" height="225"></canvas>
+        <p id="msg-final" style="text-align: center; font-weight: bold;"></p>
+        <p style="text-align: center;">Pontuação Final: <span id="final-score">0</span></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
