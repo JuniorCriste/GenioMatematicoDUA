@@ -9,8 +9,15 @@ Atividade 5 - Planejamento e Produção de Material Educacional Digital Acessív
 
 ##### Página inicial do jogo com ranking de maior pontuação ![alt text](img/prints/Genio%20Matematico.png)
 
-##### Charadas ![alt text](img/prints/Genio%20Matematico1.png)
+##### Jogo iniciando com TuxAssistente, o assistente de acessibilidade que faz narração  ![alt text](img/prints/Genio%20Matematico2.png)
 
-##### Questões aleatórias para pontuação infinita ![alt text](img/prints/Genio%20Matematico2.png)
+##### Tela de ampliação de fontes ![alt text](img/prints/Genio%20Matematico3.png)
 
-##### Status final ![alt text](img/prints/Genio%20Matematico3.png)
+##### Tela de ajuste visual onde o jogador pode utilizar alto contraste para melhor visualização ![alt text](img/prints/Genio%20Matematico4.png)
+
+#### Exemplo de tela sem uso da acessibilidade visual ![alt text](img/prints/Genio%20Matematico1.png)
+
+#### Exemplo de tela com o uso de acessibilidade em fontes ampliadas e alto contraste ![alt text](img/prints/Genio%20Matematico5.png)
+
+
+######  _Pense Livre, pense Linux!_
