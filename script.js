@@ -60,7 +60,18 @@ const charadasLogicasOriginal = [
     {q: "Quanto é a metade de 18?", a: "9"},
     {q: "Quanto é 2 elevado à quinta potência?", a: "32"},
     {q: "Quantos dias há em 5 semanas?", a: "35"},
-    {q: "Quanto é 64 dividido por 8?", a: "8"}
+    {q: "Quanto é 64 dividido por 8?", a: "8"},
+    {q: "Qual é a raiz quadrada de 4?", a: "2"},
+    {q: "Qual é a raiz quadrada de 100?", a: "10"},
+    {q: "Qual é a raiz quadrada de 64?", a: "8"},
+    {q: "Qual é a raiz quadrada de 49?", a: "7"},
+    {q: "Qual é a raiz quadrada de 81?", a: "9"},
+    {q: "Qual a resposta para √196 + √144 - √100?", a: "16"},
+    {q: "Qual a resposta para √(81 * 16)", a: "36"},
+    {q: "Qual a resposta para 320-5*(7-5)/2*3", a: "2"},
+    {q: "294 livros serão organizados em 7 prateleiras iguais. Quantos livros por prateleira?", a: "42"},
+    {q: "36 lápis serão colocados em 6 caixas iguais. Quantos lápis em cada caixa?", a: "6"},
+    {q: "45 bombons serão divididos entre 9 amigos. Quantos cada um ganha?", a: "5"}
 ];
 
 let configAcess = { fonteGrande: false, altoContraste: false, narracao: false };
