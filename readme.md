@@ -7,7 +7,7 @@ Atividade 5 - Planejamento e Produção de Material Educacional Digital Acessív
 ![alt text](img/Genio%20Matematico%20DUA.png)  
 
 
-##### Ranking de melhor jogador ![alt text](img/prints/Genio%20Matematico.png)
+##### Página inicial do jogo com ranking de maior pontuação ![alt text](img/prints/Genio%20Matematico.png)
 
 ##### Charadas ![alt text](img/prints/Genio%20Matematico1.png)
 

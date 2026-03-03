@@ -87,21 +87,14 @@ function tuxDiz(texto, callback) {
 
 window.onload = () => {
     loadHighScore();
-    
-    // Função para iniciar o fluxo
     const iniciar = () => iniciarFluxoAcessibilidade();
-    
-    // Clique no botão
     document.getElementById('btn-unlock').onclick = iniciar;
-    
-    // NOVO: Clique via Tecla 5
     window.onkeydown = (e) => {
         if (e.key === '5') iniciar();
     };
 };
 
 function iniciarFluxoAcessibilidade() {
-    // Remove o evento global da tecla 5 para não conflitar com as opções seguintes
     window.onkeydown = null;
     const container = document.getElementById('setup-container');
     container.innerHTML = '<p class="game-title-mini">Ouvindo o TuxAssistente...</p>';
@@ -139,18 +132,10 @@ function passoNarrador() {
 }
 
 function finalizarSetup() {
-    // Remove o evento de teclado das opções
     window.onkeydown = null;
     document.getElementById('setup-screen').classList.add('hidden');
-    
-    // Pula a tela de start e vai direto para o carregamento
     document.getElementById('start-screen').classList.remove('hidden');
     iniciarProcesso();
-
-    /* PARTE COMENTADA CONFORME SOLICITADO:
-    document.getElementById('btn-start').onclick = iniciarProcesso;
-    window.onkeydown = (e) => { if(e.key === '5') iniciarProcesso(); };
-    */
 }
 
 function iniciarProcesso() {
@@ -178,12 +163,10 @@ function nextQuestion() {
     if (isHard) {
         const idx = Math.floor(Math.random() * filaCharadas.length);
         qObj = filaCharadas.splice(idx, 1)[0];
-        totalTime = 180; 
-        document.getElementById('badge').innerText = "CHARADA";
+        totalTime = 180; document.getElementById('badge').innerText = "CHARADA";
     } else {
         document.getElementById('badge').innerText = "CÁLCULO";
         totalTime = 60;
-        
         let n1, n2, resultado, operacao;
         let valido = false;
 
@@ -200,28 +183,31 @@ function nextQuestion() {
                 n2 = Math.floor(Math.random() * (n1 - 1)) + 1;
                 resultado = n1 - n2;
             } else if (operacao === '*') {
-                n1 = Math.floor(Math.random() * 12) + 2;
-                n2 = Math.floor(Math.random() * 7) + 2;
+                n1 = Math.floor(Math.random() * 10) + 2;
+                n2 = Math.floor(Math.random() * 9) + 2;
                 resultado = n1 * n2;
             } else if (operacao === '/') {
-                resultado = Math.floor(Math.random() * 9) + 1; // Garante resultado pequeno
+                resultado = Math.floor(Math.random() * 9) + 1;
                 n2 = Math.floor(Math.random() * 10) + 2;
-                n1 = resultado * n2; // Garante divisão exata
+                n1 = resultado * n2;
             }
 
-            // Validação: 1-99 e sem o dígito '0' na resposta
             const resStr = resultado.toString();
             if (resultado > 0 && resultado < 100 && !resStr.includes('0')) {
                 valido = true;
-                const simbolos = { '+': '+', '-': '-', '*': 'x', '/': '÷' };
-                qObj = { q: `Quanto é ${n1} ${simbolos[operacao]} ${n2}?`, a: resStr };
+                const simbolosTela = { '+': '+', '-': '-', '*': 'x', '/': '÷' };
+                const simbolosVoz = { '+': 'mais', '-': 'menos', '*': 'multiplicado por', '/': 'dividido por' };
+                qObj = { 
+                    q: `Quanto é ${n1} ${simbolosTela[operacao]} ${n2}?`, 
+                    v: `Quanto é ${n1} ${simbolosVoz[operacao]} ${n2}?`,
+                    a: resStr 
+                };
             }
         }
     }
-
     currentAnswer = qObj.a;
     document.getElementById('question').innerText = qObj.q;
-    if(configAcess.narracao) tuxDiz(qObj.q);
+    if(configAcess.narracao) tuxDiz(qObj.v || qObj.q);
     timeLeft = totalTime;
     createInputs(currentAnswer.length);
     startCountdown();
