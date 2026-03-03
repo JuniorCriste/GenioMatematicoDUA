@@ -6,7 +6,7 @@ const charadasLogicasOriginal = [
     {q: "Se você tem 3 maçãs e tira 2, com quantas você fica?", a: "2"},
     {q: "Quantos meses têm 28 dias?", a: "12"},
     {q: "Um avô, dois pais e dois filhos foram pescar. Cada um pescou um peixe. Quantos peixes trouxeram?", a: "3"},
-    {q: "Se hoje é quarta, que número representa o dia de ontem? (1-Dom a 7-Sab)", a: "3"},
+    {q: "Se hoje é quarta, que número representa o dia de ontem? (Considere 1 para domingo e 7 para sábado)", a: "3"},
     {q: "Tenho 40 chicletes. Dei 10 para João e metade do resto para Maria. Com quantos fiquei?", a: "15"},
     {q: "Um número multiplicado por 5 resulta em 45. Que número é esse?", a: "9"},
     {q: "Quantos lados tem um heptágono?", a: "7"},
@@ -21,7 +21,7 @@ const charadasLogicasOriginal = [
     {q: "Um fazendeiro tem 17 vacas e todas morrem menos 9. Quantas ficam vivas?", a: "9"},
     {q: "Quanto é a terça parte de 6 mais 2?", a: "4"},
     {q: "Quantos anos têm uma década e meia?", a: "15"},
-    {q: "Se hoje é domingo, que número representa amanhã? (1-Dom a 7-Sáb)", a: "2"},
+    {q: "Se hoje é domingo, que número representa amanhã? (Considere 1 para domingo e 7 para sábado)", a: "2"},
     {q: "Quanto é 3 elevado ao quadrado?", a: "9"},
     {q: "Quantas letras tem a palavra FEVEREIRO?", a: "9"},
     {q: "Quantos dias há em 3 semanas?", a: "21"},
@@ -228,7 +228,7 @@ function updateUI() {
     display.innerHTML = '';
     for (let i = 0; i < lives; i++) {
         const img = document.createElement('img');
-        img.src = 'https://cdn-icons-png.flaticon.com/512/833/833472.png';
+        img.src = 'img/vida.png';
         img.style.width = '30px'; img.style.marginRight = '5px';
         display.appendChild(img);
     }
