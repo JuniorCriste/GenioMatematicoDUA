@@ -76,10 +76,22 @@ function tuxDiz(texto, callback) {
 
 window.onload = () => {
     loadHighScore();
-    document.getElementById('btn-unlock').onclick = () => iniciarFluxoAcessibilidade();
+    
+    // Função para iniciar o fluxo
+    const iniciar = () => iniciarFluxoAcessibilidade();
+    
+    // Clique no botão
+    document.getElementById('btn-unlock').onclick = iniciar;
+    
+    // NOVO: Clique via Tecla 5
+    window.onkeydown = (e) => {
+        if (e.key === '5') iniciar();
+    };
 };
 
 function iniciarFluxoAcessibilidade() {
+    // Remove o evento global da tecla 5 para não conflitar com as opções seguintes
+    window.onkeydown = null;
     const container = document.getElementById('setup-container');
     container.innerHTML = '<p class="game-title-mini">Ouvindo o TuxAssistente...</p>';
     tuxDiz("Olá, pequeno Gênio! Você está no Gênio Matemático e eu sou o Tux Assistente! Bora detonar essas questões! Mas antes vamos a algumas configurações...", () => passoFonte());
@@ -95,7 +107,6 @@ function passoFonte() {
     window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
 }
 
-   
 function passoContraste() {
     const container = document.getElementById('setup-container');
     container.innerHTML = `<p class="game-title-mini">Cores:</p><button class="postit-button" id="c1">1. PADRÃO</button><button class="postit-button" id="c2" style="background:#000; color:#fff;">2. ALTO CONTRASTE</button>`;
@@ -117,15 +128,21 @@ function passoNarrador() {
 }
 
 function finalizarSetup() {
+    // Remove o evento de teclado das opções
+    window.onkeydown = null;
     document.getElementById('setup-screen').classList.add('hidden');
+    
+    // Pula a tela de start e vai direto para o carregamento
     document.getElementById('start-screen').classList.remove('hidden');
+    iniciarProcesso();
+
+    /* PARTE COMENTADA CONFORME SOLICITADO:
     document.getElementById('btn-start').onclick = iniciarProcesso;
     window.onkeydown = (e) => { if(e.key === '5') iniciarProcesso(); };
+    */
 }
 
 function iniciarProcesso() {
-    window.onkeydown = null;
-    document.getElementById('btn-start').classList.add('hidden');
     document.getElementById('loader-section').classList.remove('hidden');
     let p = 0;
     const interval = setInterval(() => {
@@ -254,17 +271,12 @@ async function tirarFoto() {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         video.srcObject = stream;
         
-        // Espera 3 segundos para o jogador posar
         setTimeout(() => {
             const context = canvas.getContext('2d');
-            // Desenha a imagem espelhada (como no vídeo)
             context.translate(300, 0);
             context.scale(-1, 1);
             context.drawImage(video, 0, 0, 300, 225);
-            
             localStorage.setItem('math_photo', canvas.toDataURL('image/png'));
-            
-            // Para a câmera
             stream.getTracks().forEach(track => track.stop());
             video.classList.add('hidden');
             tuxDiz("Foto capturada!", () => setTimeout(() => location.reload(), 3000));
