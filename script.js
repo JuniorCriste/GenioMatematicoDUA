@@ -174,15 +174,51 @@ function nextQuestion() {
     if(timer) clearInterval(timer);
     const isHard = Math.random() > 0.6 && filaCharadas.length > 0;
     let qObj;
+
     if (isHard) {
         const idx = Math.floor(Math.random() * filaCharadas.length);
         qObj = filaCharadas.splice(idx, 1)[0];
-        totalTime = 180; document.getElementById('badge').innerText = "CHARADA";
+        totalTime = 180; 
+        document.getElementById('badge').innerText = "CHARADA";
     } else {
-        let n1 = Math.floor(Math.random() * 20) + 2, n2 = Math.floor(Math.random() * 9) + 2;
-        qObj = { q: `Quanto é ${n1} + ${n2}?`, a: (n1 + n2).toString() };
-        totalTime = 60; document.getElementById('badge').innerText = "CÁLCULO";
+        document.getElementById('badge').innerText = "CÁLCULO";
+        totalTime = 60;
+        
+        let n1, n2, resultado, operacao;
+        let valido = false;
+
+        while (!valido) {
+            const tipos = ['+', '-', '*', '/'];
+            operacao = tipos[Math.floor(Math.random() * tipos.length)];
+
+            if (operacao === '+') {
+                n1 = Math.floor(Math.random() * 90) + 1;
+                n2 = Math.floor(Math.random() * 9) + 1;
+                resultado = n1 + n2;
+            } else if (operacao === '-') {
+                n1 = Math.floor(Math.random() * 98) + 2;
+                n2 = Math.floor(Math.random() * (n1 - 1)) + 1;
+                resultado = n1 - n2;
+            } else if (operacao === '*') {
+                n1 = Math.floor(Math.random() * 12) + 2;
+                n2 = Math.floor(Math.random() * 7) + 2;
+                resultado = n1 * n2;
+            } else if (operacao === '/') {
+                resultado = Math.floor(Math.random() * 9) + 1; // Garante resultado pequeno
+                n2 = Math.floor(Math.random() * 10) + 2;
+                n1 = resultado * n2; // Garante divisão exata
+            }
+
+            // Validação: 1-99 e sem o dígito '0' na resposta
+            const resStr = resultado.toString();
+            if (resultado > 0 && resultado < 100 && !resStr.includes('0')) {
+                valido = true;
+                const simbolos = { '+': '+', '-': '-', '*': 'x', '/': '÷' };
+                qObj = { q: `Quanto é ${n1} ${simbolos[operacao]} ${n2}?`, a: resStr };
+            }
+        }
     }
+
     currentAnswer = qObj.a;
     document.getElementById('question').innerText = qObj.q;
     if(configAcess.narracao) tuxDiz(qObj.q);
