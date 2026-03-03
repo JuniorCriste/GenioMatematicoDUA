@@ -81,12 +81,13 @@ window.onload = () => {
 
 function iniciarFluxoAcessibilidade() {
     const container = document.getElementById('setup-container');
-    container.innerHTML = '<p class="game-title-mini">Ouvindo o Tux...</p>';
-    tuxDiz("Escolha o tamanho da fonte: 1 normal ou 2 grande.", () => passoFonte());
+    container.innerHTML = '<p class="game-title-mini">Ouvindo o TuxAssistente...</p>';
+    tuxDiz("Olá, pequeno Gênio! Você está no Gênio Matemático e eu sou o Tux Assistente! Bora detonar essas questões! Mas antes vamos a algumas configurações...", () => passoFonte());
 }
 
 function passoFonte() {
     const container = document.getElementById('setup-container');
+    tuxDiz("Escolha o tamanho da fonte: 1 para tamanho normal ou 2 para grande.");
     container.innerHTML = `<p class="game-title-mini">Fonte:</p><button class="postit-button" id="f1">1. NORMAL</button><button class="postit-button" id="f2">2. GRANDE</button>`;
     const selecionar = (v) => { if(v === 2) { configAcess.fonteGrande = true; document.body.classList.add('font-grande'); } passoContraste(); };
     document.getElementById('f1').onclick = () => selecionar(1);
@@ -94,9 +95,11 @@ function passoFonte() {
     window.onkeydown = (e) => { if(e.key==='1') selecionar(1); if(e.key==='2') selecionar(2); };
 }
 
+   
 function passoContraste() {
     const container = document.getElementById('setup-container');
     container.innerHTML = `<p class="game-title-mini">Cores:</p><button class="postit-button" id="c1">1. PADRÃO</button><button class="postit-button" id="c2" style="background:#000; color:#fff;">2. ALTO CONTRASTE</button>`;
+    tuxDiz("Como você prefere a interface? Pressione 1 para cores normais ou 2 para alto contraste.");
     const selecionar = (v) => { if(v === 2) { configAcess.altoContraste = true; document.body.classList.add('high-contrast'); } passoNarrador(); };
     document.getElementById('c1').onclick = () => selecionar(1);
     document.getElementById('c2').onclick = () => selecionar(2);
@@ -105,6 +108,7 @@ function passoContraste() {
 
 function passoNarrador() {
     const container = document.getElementById('setup-container');
+    tuxDiz("Você quer que o Tux Assistente continue lendo para você? Aperte 1 para eu continuar te ajudando ou 2 para me silenciar...");
     container.innerHTML = `<p class="game-title-mini">Narrador?</p><button class="postit-button" id="n1">1. SIM</button><button class="postit-button" id="n2">2. NÃO</button>`;
     const selecionar = (v) => { configAcess.narracao = (v === 1); finalizarSetup(); };
     document.getElementById('n1').onclick = () => selecionar(1);
