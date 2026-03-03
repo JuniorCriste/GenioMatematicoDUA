@@ -229,7 +229,7 @@ function updateUI() {
     for (let i = 0; i < lives; i++) {
         const img = document.createElement('img');
         img.src = 'img/vida.png';
-        img.style.width = '30px'; img.style.marginRight = '5px';
+        img.style.width = '25px'; img.style.marginRight = '5px';
         display.appendChild(img);
     }
 }
