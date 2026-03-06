@@ -62,7 +62,7 @@ const charadasLogicasOriginal = [
     {q: "Quantos dias há em 5 semanas?", a: "35"},
     {q: "Quanto é 64 dividido por 8?", a: "8"},
     {q: "Qual é a raiz quadrada de 4?", a: "2"},
-    {q: "Qual é a raiz quadrada de 100?", a: "10"},
+    {q: "Qual é a raiz quadrada de 144?", a: "12"},
     {q: "Qual é a raiz quadrada de 64?", a: "8"},
     {q: "Qual é a raiz quadrada de 49?", a: "7"},
     {q: "Qual é a raiz quadrada de 81?", a: "9"},
